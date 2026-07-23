@@ -82,7 +82,7 @@ export function Testimonials() {
             <article
               key={review.name}
               data-testimonial-card
-              className="group relative flex flex-col w-full max-w-[370px] h-[270px] rounded-[24px] border border-white/[0.08] bg-[#070d19]/40 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.3)] backdrop-blur-md transition-all duration-300 ease-out hover:border-cyan-brand/40 hover:bg-[#070d19]/55 hover:-translate-y-2"
+              className="group relative flex flex-col w-full max-w-[370px] h-auto md:h-[270px] rounded-[24px] border border-white/[0.08] bg-[#070d19]/40 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.3)] backdrop-blur-md transition-all duration-300 ease-out hover:border-cyan-brand/40 hover:bg-[#070d19]/55 hover:-translate-y-2"
             >
               {/* Top Row: Logo & Stars */}
               <div className="flex items-center justify-between">

@@ -55,7 +55,7 @@ export function Team() {
           {/* Card 1: Founder */}
           <article
             data-team-card
-            className="group relative flex flex-col overflow-hidden rounded-[24px] w-full max-w-[440px] h-[570px] border border-white/[0.08] bg-[#070d19]/40 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300 ease-out hover:border-cyan-brand/40 hover:bg-[#070d19]/55 hover:shadow-[0_8px_30px_rgba(0,180,204,0.1)]"
+            className="group relative flex flex-col overflow-hidden rounded-[24px] w-full max-w-[440px] h-auto md:h-[570px] border border-white/[0.08] bg-[#070d19]/40 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300 ease-out hover:border-cyan-brand/40 hover:bg-[#070d19]/55 hover:shadow-[0_8px_30px_rgba(0,180,204,0.1)]"
           >
             {/* Image container: exactly 320px height */}
             <div className="relative h-[320px] w-full overflow-hidden rounded-t-[24px] bg-[#020912]">
@@ -110,7 +110,7 @@ export function Team() {
           {/* Card 2: Engineering */}
           <article
             data-team-card
-            className="group relative flex flex-col overflow-hidden rounded-[24px] w-full max-w-[440px] h-[570px] border border-white/[0.08] bg-[#070d19]/40 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300 ease-out hover:border-cyan-brand/40 hover:bg-[#070d19]/55 hover:shadow-[0_8px_30px_rgba(0,180,204,0.1)]"
+            className="group relative flex flex-col overflow-hidden rounded-[24px] w-full max-w-[440px] h-auto md:h-[570px] border border-white/[0.08] bg-[#070d19]/40 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all duration-300 ease-out hover:border-cyan-brand/40 hover:bg-[#070d19]/55 hover:shadow-[0_8px_30px_rgba(0,180,204,0.1)]"
           >
             {/* Image container: exactly 320px height */}
             <div className="relative h-[320px] w-full overflow-hidden rounded-t-[24px] bg-[#020912]">
