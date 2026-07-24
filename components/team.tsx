@@ -128,15 +128,6 @@ export function Team() {
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground/90">
                 Creating AI-powered applications, autonomous agents, chatbots, and custom automation infrastructure.
               </p>
-
-              <div className="mt-auto pt-5">
-                <a
-                  href="#contact"
-                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
-                >
-                  Start a Project with Us
-                </a>
-              </div>
             </div>
           </article>
         </Reveal>
