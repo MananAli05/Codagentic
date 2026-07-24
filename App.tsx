@@ -15,6 +15,8 @@ import { Contact } from '@/components/contact'
 import { Footer } from '@/components/footer'
 import { PrivacyPolicy } from '@/components/privacy-policy'
 import { TermsConditions } from '@/components/terms-conditions'
+import { ModalProvider } from '@/lib/modal-context'
+import { ModalManager } from '@/components/modals'
 import * as React from 'react'
 
 export default function App() {
@@ -34,29 +36,32 @@ export default function App() {
   }, [])
 
   return (
-    <SmoothScroll>
-      <div className="noise-overlay" />
-      <LatticeBackground />
-      <SiteNav />
-      <main className="relative z-10">
-        {currentPath === '/privacy-policy' ? (
-          <PrivacyPolicy />
-        ) : currentPath === '/terms-conditions' ? (
-          <TermsConditions />
-        ) : (
-          <>
-            <Hero />
-            <About />
-            <Process />
-            <Services />
-            <Industries />
-            <Team />
-            <Testimonials />
-            <Contact />
-          </>
-        )}
-      </main>
-      <Footer />
-    </SmoothScroll>
+    <ModalProvider>
+      <SmoothScroll>
+        <div className="noise-overlay" />
+        <LatticeBackground />
+        <SiteNav />
+        <main className="relative z-10">
+          {currentPath === '/privacy-policy' ? (
+            <PrivacyPolicy />
+          ) : currentPath === '/terms-conditions' ? (
+            <TermsConditions />
+          ) : (
+            <>
+              <Hero />
+              <About />
+              <Process />
+              <Services />
+              <Industries />
+              <Team />
+              <Testimonials />
+              <Contact />
+            </>
+          )}
+        </main>
+        <Footer />
+        <ModalManager />
+      </SmoothScroll>
+    </ModalProvider>
   )
 }

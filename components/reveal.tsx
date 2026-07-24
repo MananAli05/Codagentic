@@ -6,15 +6,32 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+export type AnimationVariant =
+  | 'fade-up'
+  | 'fade-down'
+  | 'zoom-in'
+  | 'slide-right'
+  | 'slide-left'
+  | 'flip-up'
+
 interface RevealProps {
   children: React.ReactNode
   className?: string
   /** Selector for staggered children; if omitted the wrapper itself animates */
   stagger?: string
   delay?: number
+  variant?: AnimationVariant
+  staggerSpeed?: number
 }
 
-export function Reveal({ children, className, stagger, delay = 0 }: RevealProps) {
+export function Reveal({
+  children,
+  className,
+  stagger,
+  delay = 0,
+  variant = 'fade-up',
+  staggerSpeed = 0.1,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -29,27 +46,52 @@ export function Reveal({ children, className, stagger, delay = 0 }: RevealProps)
     if (targets.length === 0) return
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        targets,
-        { opacity: 0, y: 36 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          ease: 'power3.out',
-          delay,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 82%',
-            once: true,
-          },
-        }
-      )
+      let fromVars: gsap.TweenVars = { opacity: 0 }
+      let toVars: gsap.TweenVars = {
+        opacity: 1,
+        duration: 0.85,
+        delay,
+        stagger: staggerSpeed,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+        },
+      }
+
+      switch (variant) {
+        case 'zoom-in':
+          fromVars = { opacity: 0, scale: 0.88, y: 24 }
+          toVars = { ...toVars, scale: 1, y: 0, ease: 'back.out(1.3)' }
+          break
+        case 'slide-right':
+          fromVars = { opacity: 0, x: -45 }
+          toVars = { ...toVars, x: 0, ease: 'power3.out' }
+          break
+        case 'slide-left':
+          fromVars = { opacity: 0, x: 45 }
+          toVars = { ...toVars, x: 0, ease: 'power3.out' }
+          break
+        case 'flip-up':
+          fromVars = { opacity: 0, rotateX: 28, y: 32 }
+          toVars = { ...toVars, rotateX: 0, y: 0, ease: 'power3.out' }
+          break
+        case 'fade-down':
+          fromVars = { opacity: 0, y: -36 }
+          toVars = { ...toVars, y: 0, ease: 'power3.out' }
+          break
+        case 'fade-up':
+        default:
+          fromVars = { opacity: 0, y: 38 }
+          toVars = { ...toVars, y: 0, ease: 'power3.out' }
+          break
+      }
+
+      gsap.fromTo(targets, fromVars, toVars)
     }, el)
 
     return () => ctx.revert()
-  }, [stagger, delay])
+  }, [stagger, delay, variant, staggerSpeed])
 
   return (
     <div ref={ref} className={className}>

@@ -1,14 +1,28 @@
-﻿'use client'
+'use client'
 
 import { Reveal } from '@/components/reveal'
+import { useModals, ServiceDetail } from '@/lib/modal-context'
 
-const services = [
+interface ServiceItem extends ServiceDetail {
+  visual: string
+}
+
+const services: ServiceItem[] = [
   {
     visual: 'generative',
     num: '01',
     title: 'Generative AI Integration',
     hook: 'Bespoke models, not generic prompts.',
     desc: 'Custom-tailored generative pipelines for content generation, image generation, data parsing, and business operations.',
+    overview: 'We build custom-tailored generative pipelines for structured content generation, multimodal document parsing, automated report creation, and synthetic data generation, seamlessly integrated into your software ecosystem.',
+    features: [
+      'Multimodal LLM integration (GPT-4o, Claude 3.5, Gemini)',
+      'Structured JSON output validation & schema enforcement',
+      'Enterprise safety guardrails & PII redaction',
+      'Automated batch parsing & content generation pipelines',
+    ],
+    techStack: ['OpenAI API', 'Anthropic Claude', 'FastAPI', 'Instructor', 'LangChain'],
+    deliverables: ['Custom API Microservices', 'Automated Content Pipeline', 'Admin Control Dashboard'],
   },
   {
     visual: 'rag',
@@ -16,6 +30,15 @@ const services = [
     title: 'RAG Applications',
     hook: 'Your private databases, talking back.',
     desc: 'Secure vector search systems connecting large language models to your company databases, wiki docs, and internal knowledge bases.',
+    overview: 'Transform static internal databases, PDFs, Notion spaces, and SQL records into conversational intelligence. Our Retrieval-Augmented Generation (RAG) systems deliver hyper-accurate answers backed by exact source citations.',
+    features: [
+      'Hybrid semantic vector + keyword search retrieval',
+      'Multi-format document connectors (PDF, DOCX, Notion, SQL)',
+      'Role-based data access control & encryption',
+      'Hallucination reduction & citation verification',
+    ],
+    techStack: ['Pinecone', 'Qdrant', 'LlamaIndex', 'Supabase Vector', 'Python'],
+    deliverables: ['Knowledge Search Engine', 'Internal QA Assistant', 'Auto-updating Vector Pipeline'],
   },
   {
     visual: 'automation',
@@ -23,6 +46,15 @@ const services = [
     title: 'AI Process Automation',
     hook: 'Retire manual, repetitive tasks.',
     desc: 'Automating high-volume business workflows, document processing pipelines, automated email routing, and data cleaning loops.',
+    overview: 'End-to-end automation of high-volume repetitive tasks. We replace manual data entry, email processing, and invoice verification with autonomous intelligent bots.',
+    features: [
+      'Intelligent OCR & document processing',
+      'Automated email categorization & routing',
+      'Multi-app workflow orchestration (CRM, ERP, Slack)',
+      'Human-in-the-loop exception handling',
+    ],
+    techStack: ['n8n', 'Make', 'Python', 'FastAPI', 'Celery'],
+    deliverables: ['Workflow Integration Suite', 'Document Extraction Bot', 'Email Triage Automation'],
   },
   {
     visual: 'chatbot',
@@ -30,6 +62,15 @@ const services = [
     title: 'Custom AI Chatbots',
     hook: 'Customer service, trained on your data.',
     desc: 'Dynamic customer support bots and sales assistants that live on your website and support channels, keeping your voice consistent.',
+    overview: '24/7 intelligent customer service agents trained exclusively on your products, FAQ knowledge bases, and inventory systems to resolve support queries and qualify inbound leads.',
+    features: [
+      'Omnichannel support (Web, WhatsApp, Slack, Email)',
+      'Real-time CRM lead qualification & booking',
+      'Custom brand tone & guardrail alignment',
+      'Seamless human support rep handoff',
+    ],
+    techStack: ['LangGraph', 'Next.js', 'Voiceflow', 'Supabase', 'Webhooks'],
+    deliverables: ['Embeddable Web Chat Widget', 'WhatsApp/Slack AI Agent', 'Analytics & Conversation Dashboard'],
   },
   {
     visual: 'copilot',
@@ -37,6 +78,15 @@ const services = [
     title: 'AI Copilots & Assistants',
     hook: 'Amplify employee performance.',
     desc: 'Intelligent interface companions that assist your operational team in real-time, built directly into your legacy software workflows.',
+    overview: 'Empower your employees with embedded AI assistants that suggest next steps, write context-aware draft responses, summarize long threads, and trigger backend actions inside your team tools.',
+    features: [
+      'Contextual inline suggestions & auto-completion',
+      'Browser extension & desktop widget capabilities',
+      'Real-time meeting & document summarization',
+      'Custom action triggers for internal tools',
+    ],
+    techStack: ['React', 'Chrome Extension API', 'Anthropic Claude', 'OpenAI'],
+    deliverables: ['Custom Chrome Extension', 'Inline Copilot Widget', 'Productivity Analytics'],
   },
   {
     visual: 'training',
@@ -44,6 +94,15 @@ const services = [
     title: 'LLM Tuning & Training',
     hook: 'Domain-specific model intelligence.',
     desc: 'Fine-tuning open-weight models (Llama, Mistral, Qwen) on your proprietary datasets to achieve deep domain specialization.',
+    overview: 'Achieve maximum data privacy, ultra-low latency, and lower token costs by fine-tuning open-weight models on your domain-specific codebases, legal documents, or medical records.',
+    features: [
+      'LoRA & QLoRA parameter-efficient fine-tuning',
+      'Dataset curation & synthetic data generation',
+      'Self-hosted, private cloud LLM deployment',
+      'Custom model benchmark & latency optimization',
+    ],
+    techStack: ['PyTorch', 'Hugging Face', 'Llama 3', 'vLLM', 'RunPod'],
+    deliverables: ['Quantized Private Weights', 'Inference API Service', 'Model Evaluation Benchmark Report'],
   },
   {
     visual: 'agents',
@@ -51,6 +110,15 @@ const services = [
     title: 'Autonomous AI Agents',
     hook: 'Multi-agent coordination loops.',
     desc: 'Intelligent systems capable of reasoning, tool usage, APIs interaction, and long-term planning with LangGraph frameworks.',
+    overview: 'Engineered multi-agent systems that solve complex, multi-step tasks. Our agents break down objectives, browse the web, execute code, query databases, and verify their own results.',
+    features: [
+      'Multi-agent graph architectures (LangGraph / CrewAI)',
+      'Autonomous tool use & web interaction',
+      'Persistent memory & long-term goal tracking',
+      'Self-correcting reasoning loops',
+    ],
+    techStack: ['LangGraph', 'AutoGen', 'Python', 'Redis', 'Docker'],
+    deliverables: ['Autonomous Web Research Agent', 'Multi-Agent Workflow Engine', 'Execution Logs UI'],
   },
   {
     visual: 'api',
@@ -58,6 +126,15 @@ const services = [
     title: 'Enterprise API Integration',
     hook: 'Bridges to legacy environments.',
     desc: 'Secure integrations connecting advanced AI agents to traditional CRM, ERP databases, billing models, and server infrastructure.',
+    overview: 'Connect state-of-the-art AI infrastructure to your legacy enterprise software. We build secure REST, GraphQL, and webhook API layers for seamless data flow.',
+    features: [
+      'Legacy ERP & CRM connectors (Salesforce, SAP, HubSpot)',
+      'Enterprise rate-limiting & auto-retry logic',
+      'SOC2 & GDPR ready security wrappers',
+      'Real-time telemetry & API logging',
+    ],
+    techStack: ['FastAPI', 'Node.js', 'PostgreSQL', 'Docker', 'OpenAPI'],
+    deliverables: ['Middleware API Gateway', 'Secure Webhook Bridge', 'Developer API Documentation'],
   },
 ]
 
@@ -225,55 +302,61 @@ function ServiceVisual({ type }: { type: string }) {
 }
 
 export function Services() {
+  const { openServiceDetail } = useModals()
+
   return (
-    <section id="services" className="relative section-pad px-5 md:px-8">
+    <section id="services" className="relative section-pad px-5 md:px-8 border-y border-white/[0.08] bg-[#040e17]/60 backdrop-blur-sm">
       <div className="pointer-events-none absolute left-1/2 top-20 -z-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-[#2EAFFF]/10 blur-3xl" />
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-14 max-w-3xl md:mb-20">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-[#8FEAFF]">Core Capabilities</p>
           <h2 className="font-sans text-3xl font-extrabold headline-tight text-balance md:text-5xl">
             AI solutions and real-world software, <span className="gradient-brand-text">engineered for scale</span>
           </h2>
         </Reveal>
 
         <Reveal
+          variant="zoom-in"
           stagger="[data-card]"
-          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-fr"
+          staggerSpeed={0.08}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-fr"
         >
           {services.map((service) => (
             <article
               key={service.num}
               data-card
-              className="group flex h-full min-h-[430px] flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.045] shadow-[0_18px_58px_rgba(0,0,0,0.25)] glass-panel transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#2EAFFF]/35 hover:bg-white/[0.06] hover:shadow-[0_26px_80px_rgba(46,175,255,0.14)]"
+              className="group relative flex h-full min-h-[430px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] shadow-[0_18px_58px_rgba(0,0,0,0.25)] glass-panel transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#2EAFFF]/35 hover:bg-white/[0.06] hover:shadow-[0_26px_80px_rgba(46,175,255,0.14)]"
             >
-              <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-white/10 bg-[#03111C]/45 px-8 py-7">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-white/10 bg-[#03111C]/60 px-8 py-7">
                 <div className="pointer-events-none absolute inset-x-10 bottom-4 h-24 rounded-full bg-[#00B4CC]/12 blur-2xl opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
                 <ServiceVisual type={service.visual} />
               </div>
 
               <div className="flex flex-1 flex-col p-6 md:p-7">
-                <div className="mb-5 flex items-center justify-between gap-4">
-                  <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8FEAFF]/70">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#8FEAFF]">
                     {service.num}
                   </p>
-                  <span className="h-px flex-1 bg-gradient-to-r from-[#8FEAFF]/25 to-transparent" />
+                  <span className="h-px flex-1 bg-gradient-to-r from-[#8FEAFF]/30 to-transparent" />
                 </div>
 
                 <h3 className="font-sans text-xl font-extrabold headline-tight text-foreground">
                   {service.title}
                 </h3>
-                <p className="mt-3 text-sm font-medium leading-relaxed text-[#49F2B2]/90">
+                <p className="mt-3 text-sm font-semibold leading-relaxed text-[#49F2B2]">
                   {service.hook}
                 </p>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground/90">
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground/90">
                   {service.desc}
                 </p>
 
-                <a
-                  href="#contact"
-                  className="mt-auto inline-flex pt-7 text-sm font-semibold text-[#8FEAFF] transition-colors duration-300 hover:text-[#49F2B2]"
+                <button
+                  type="button"
+                  onClick={() => openServiceDetail(service)}
+                  className="mt-auto inline-flex pt-6 text-sm font-bold text-[#8FEAFF] transition-colors duration-300 hover:text-[#49F2B2] cursor-pointer text-left"
                 >
-                  Learn More <span aria-hidden="true" className="ml-1 transition-transform duration-300 group-hover:translate-x-1">-&gt;</span>
-                </a>
+                  Learn More
+                </button>
               </div>
             </article>
           ))}

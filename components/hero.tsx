@@ -6,6 +6,8 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { motion } from 'framer-motion'
 import { LineChart, MessageCircle, Mic, Workflow } from 'lucide-react'
 import * as THREE from 'three'
+import { useModals } from '@/lib/modal-context'
+import * as React from 'react'
 
 const technologies = [
   { name: 'OpenAI', logo: '/tech-logos/openai.svg', color: '#10A37F', width: 104 },
@@ -17,6 +19,7 @@ const technologies = [
   { name: 'Pinecone', logo: '/tech-logos/pinecone.svg', color: '#00E599', width: 124 },
   { name: 'n8n', logo: '/tech-logos/n8n.svg', color: '#EA4B71', width: 82 },
 ]
+
 function CyanParticles() {
   const pointsRef = useRef<THREE.Points>(null)
 
@@ -148,6 +151,7 @@ function HeroEcosystem() {
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
+  const { openStartProject } = useModals()
 
   useEffect(() => {
     const el = sectionRef.current
@@ -170,16 +174,16 @@ export function Hero() {
           '-=0.4'
         )
         .fromTo(
+          '[data-hero-3d]',
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.2)' },
+          '-=0.4'
+        )
+        .fromTo(
           '[data-hero-cta]',
           { opacity: 0, y: 12 },
           { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 },
           '-=0.3'
-        )
-        .fromTo(
-          '[data-hero-3d]',
-          { opacity: 0, scale: 0.8 },
-          { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.2)' },
-          '-=0.8'
         )
         .fromTo(
           '[data-hero-stat]',
@@ -196,11 +200,11 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="top"
-      className="relative flex min-h-svh items-center overflow-hidden px-6 pt-32 pb-16 md:px-12 lg:pt-20"
+      className="relative flex min-h-svh items-center overflow-hidden px-5 pt-24 pb-12 sm:px-8 md:px-12 lg:pt-20"
     >
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-center">
         
-        {/* Left Column: Text Content */}
+        {/* Left Column: Text Content + Integrated Mobile Robot */}
         <div className="relative flex flex-col justify-center text-center lg:col-span-6 lg:text-left">
           {/* Background glow directly behind the hero title */}
           <div
@@ -211,12 +215,10 @@ export function Hero() {
             }}
           />
 
-
-
           {/* Heading */}
-          <h1 className="font-sans text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-[5.5rem] lg:leading-[1.02] text-balance mt-6 lg:mt-10">
+          <h1 className="font-sans text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-[5.5rem] lg:leading-[1.02] text-balance mt-2 lg:mt-10">
             <span data-hero-line className="block">Dream It.</span>
-            <span data-hero-line className="block mt-2">
+            <span data-hero-line className="block mt-1 sm:mt-2">
               We Will <span className="gradient-brand-text">AI It.</span>
             </span>
           </h1>
@@ -224,45 +226,61 @@ export function Hero() {
           {/* Subtitle */}
           <p
             data-hero-sub
-            className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg mx-auto lg:mx-0 text-pretty"
+            className="mt-4 sm:mt-6 max-w-xl text-sm sm:text-base leading-relaxed text-muted-foreground md:text-lg mx-auto lg:mx-0 text-pretty"
           >
             We build smart AI software, automation systems, chatbots, and business tools that help companies work faster and smarter.
           </p>
 
+          {/* Mobile 3D Robot Container (Visible on mobile/tablet < lg) */}
+          <div className="my-5 flex items-center justify-center lg:hidden">
+            <div
+              data-hero-3d
+              className="relative h-[290px] w-full max-w-[360px] sm:h-[380px]"
+            >
+              <div
+                className="pointer-events-none absolute inset-0 -z-10 rounded-full blur-2xl opacity-40"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(46,175,255,0.3) 0%, rgba(73,242,178,0.15) 50%, transparent 70%)',
+                }}
+              />
+              <HeroEcosystem />
+            </div>
+          </div>
+
           {/* CTA Buttons */}
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-            <a
+          <div className="mt-3 sm:mt-8 flex flex-col justify-center gap-3.5 sm:flex-row lg:justify-start">
+            <button
+              type="button"
               data-hero-cta
-              href="#contact"
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-bold text-background transition-opacity hover:opacity-90"
+              onClick={() => openStartProject()}
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-bold text-background transition-all duration-300 hover:opacity-90 shadow-[0_0_20px_rgba(255,255,255,0.15)] cursor-pointer"
             >
               Start a Project
-            </a>
+            </button>
             <a
               data-hero-cta
               href="#services"
-              className="glass-panel inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-surface-2"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-[#2EAFFF]/60 bg-[#2EAFFF]/12 px-7 py-3.5 text-sm font-bold text-foreground backdrop-blur-md shadow-[0_0_20px_rgba(46,175,255,0.15)] transition-all duration-300 hover:border-[#2EAFFF] hover:bg-[#2EAFFF]/25 hover:shadow-[0_0_28px_rgba(46,175,255,0.35)] hover:-translate-y-0.5 cursor-pointer"
             >
               Our Services
             </a>
           </div>
         </div>
 
-        {/* Right Column: 3D Animation */}
-        <div className="flex items-center justify-center lg:col-span-6">
+        {/* Desktop 3D Animation (Visible on lg+) */}
+        <div className="hidden items-center justify-center lg:col-span-6 lg:flex">
           <div
             data-hero-3d
-            className="relative h-[360px] w-full max-w-[480px] sm:h-[440px] lg:h-[560px] lg:max-w-none"
+            className="relative h-[560px] w-full"
           >
-            {/* Background glow beneath 3D canvas */}
             <div
-              className="pointer-events-none absolute inset-0 -z-10 rounded-full blur-3xl opacity-40 transition-opacity duration-1000"
+              className="pointer-events-none absolute inset-0 -z-10 rounded-full blur-3xl opacity-40"
               style={{
                 background:
                   'radial-gradient(circle, rgba(46,175,255,0.3) 0%, rgba(73,242,178,0.15) 50%, transparent 70%)',
               }}
             />
-            
             <HeroEcosystem />
           </div>
         </div>

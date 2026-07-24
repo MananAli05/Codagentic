@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { navigate } from '@/lib/router'
+import { navigate, scrollToSection } from '@/lib/router'
+import { useModals } from '@/lib/modal-context'
 import * as React from 'react'
 
 const links = [
@@ -27,12 +28,23 @@ function NavbarLogo({ mobile = false }: { mobile?: boolean }) {
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { openStrategyCall } = useModals()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    // If user refreshes or loads page with a hash like #contact, scroll and clean URL
+    if (window.location.hash) {
+      const hash = window.location.hash
+      setTimeout(() => {
+        scrollToSection(hash)
+      }, 100)
+    }
   }, [])
 
   useEffect(() => {
@@ -43,22 +55,23 @@ export function SiteNav() {
   }, [open])
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
     if (window.location.pathname !== '/') {
-      e.preventDefault()
       navigate('/')
       setTimeout(() => {
-        const element = document.querySelector(href)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 50)
+        scrollToSection(href)
+      }, 100)
+    } else {
+      scrollToSection(href)
     }
   }
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
     if (window.location.pathname !== '/') {
-      e.preventDefault()
       navigate('/')
+    } else {
+      scrollToSection('#top')
     }
   }
 
@@ -101,13 +114,13 @@ export function SiteNav() {
         </div>
 
         <div className="hidden items-center md:block">
-          <a
-            href="#contact"
-            onClick={(e) => handleLinkClick(e, '#contact')}
-            className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-foreground px-6 py-2.5 text-xs font-bold text-background transition-all duration-300 hover:bg-foreground/90 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,255,255,0.08)]"
+          <button
+            type="button"
+            onClick={() => openStrategyCall()}
+            className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-foreground px-6 py-2.5 text-xs font-bold text-background transition-all duration-300 hover:bg-foreground/90 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,255,255,0.08)] cursor-pointer"
           >
             Book a Strategy Call
-          </a>
+          </button>
         </div>
 
         <button
@@ -159,16 +172,16 @@ export function SiteNav() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={(e) => {
-                handleLinkClick(e, '#contact')
+            <button
+              type="button"
+              onClick={() => {
                 setOpen(false)
+                openStrategyCall()
               }}
-              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-foreground px-7 py-3.5 text-sm font-semibold text-background"
+              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-foreground px-7 py-3.5 text-sm font-semibold text-background cursor-pointer"
             >
               Book a Strategy Call
-            </a>
+            </button>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 'use client'
 
-import { navigate } from '@/lib/router'
+import { navigate, scrollToSection } from '@/lib/router'
+import { Mail, Phone, MapPin } from 'lucide-react'
 
 const links = [
   { href: '#services', label: 'Services' },
@@ -10,24 +11,47 @@ const links = [
 ]
 
 export function Footer() {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    if (window.location.pathname !== '/') {
+      navigate('/')
+      setTimeout(() => {
+        scrollToSection(href)
+      }, 100)
+    } else {
+      scrollToSection(href)
+    }
+  }
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    if (window.location.pathname !== '/') {
+      navigate('/')
+    } else {
+      scrollToSection('#top')
+    }
+  }
+
   return (
-    <footer className="relative border-t border-white/[0.08] bg-[#020912]/80 backdrop-blur-md px-5 py-8 md:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
+    <footer className="relative border-t border-white/[0.1] bg-[#020912]/90 backdrop-blur-md px-5 py-10 md:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8">
         
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <a
             href="#top"
-            className="transition-opacity hover:opacity-90 w-fit block"
+            onClick={handleLogoClick}
+            className="transition-opacity hover:opacity-90 w-fit block cursor-pointer"
           >
-            <img src="/codagentic-logo.png" alt="CodAgentic AI" className="h-6 w-auto select-none" />
+            <img src="/codagentic-logo.png" alt="CodAgentic AI" className="h-7 w-auto select-none" />
           </a>
 
-          <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-6 gap-y-2">
+          <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-8 gap-y-2">
             {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-xs font-semibold text-muted-foreground transition-colors duration-300 hover:text-cyan-brand"
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className="text-sm font-semibold text-foreground/80 transition-colors duration-300 hover:text-cyan-brand cursor-pointer"
               >
                 {link.label}
               </a>
@@ -35,27 +59,41 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="h-px bg-white/[0.06] w-full" />
+        <div className="h-px bg-white/[0.08] w-full" />
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-muted-foreground">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <a href="mailto:info@codagenticai.com" className="hover:text-cyan-brand transition-colors duration-300">
-              Email: info@codagenticai.com
+        {/* High Contrast Contact Details Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm font-medium text-foreground">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <a
+              href="mailto:info@codagenticai.com"
+              className="inline-flex items-center gap-2 text-foreground/90 transition-colors duration-300 hover:text-cyan-brand"
+            >
+              <Mail className="size-4 text-cyan-brand shrink-0" />
+              <span><strong className="text-cyan-brand">Email:</strong> info@codagenticai.com</span>
             </a>
-            <a href="tel:+923126938208" className="hover:text-cyan-brand transition-colors duration-300">
-              Phone: +92 312 6938208
+
+            <a
+              href="tel:+923126938208"
+              className="inline-flex items-center gap-2 text-foreground/90 transition-colors duration-300 hover:text-cyan-brand"
+            >
+              <Phone className="size-4 text-cyan-brand shrink-0" />
+              <span><strong className="text-cyan-brand">Phone:</strong> +92 312 6938208</span>
             </a>
-            <span>Location: Rahim Yar Khan, Punjab, Pakistan</span>
+
+            <div className="inline-flex items-center gap-2 text-foreground/90">
+              <MapPin className="size-4 text-cyan-brand shrink-0" />
+              <span><strong className="text-cyan-brand">Location:</strong> Rahim Yar Khan, Punjab, Pakistan</span>
+            </div>
           </div>
         </div>
 
-        <div className="h-px bg-white/[0.06] w-full" />
+        <div className="h-px bg-white/[0.08] w-full" />
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-[11px] text-muted-foreground/60">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs font-medium text-muted-foreground">
           <p>
             &copy; {new Date().getFullYear()} CodAgentic AI. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <span 
               onClick={() => navigate('/privacy-policy')}
               className="hover:text-cyan-brand transition-colors duration-300 cursor-pointer"
@@ -75,4 +113,3 @@ export function Footer() {
     </footer>
   )
 }
-

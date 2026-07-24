@@ -1,15 +1,130 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Check } from 'lucide-react'
+import { Check, AlertCircle, RotateCcw } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
 import * as React from 'react'
 
-const inputClass =
-  'rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 hover:border-cyan-brand/30 focus:border-cyan-brand/60 focus:bg-white/[0.06] focus:outline-none focus:ring-1 focus:ring-cyan-brand/20 w-full'
+const inputBaseClass =
+  'rounded-xl border bg-white/[0.04] px-3.5 py-2.5 text-sm text-foreground placeholder:text-white/60 transition-all duration-300 focus:bg-white/[0.06] focus:outline-none w-full'
 
 export function Contact() {
   const [sent, setSent] = useState(false)
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  })
+
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    message: '',
+  })
+
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    message: false,
+  })
+
+  const validateName = (name: string): string => {
+    const trimmed = name.trim()
+    if (!trimmed) {
+      return 'Name is required'
+    }
+    if (trimmed.length < 2) {
+      return 'Name must be at least 2 characters long'
+    }
+    const nameRegex = /^[a-zA-Z\s'-]{2,50}$/
+    if (!nameRegex.test(trimmed)) {
+      return 'Please enter a valid name (letters, spaces, hyphens only)'
+    }
+    return ''
+  }
+
+  const validateEmail = (email: string): string => {
+    const trimmed = email.trim()
+    if (!trimmed) {
+      return 'Email is required'
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(trimmed)) {
+      return 'Please enter a valid email address (e.g. name@company.com)'
+    }
+    return ''
+  }
+
+  const validateMessage = (message: string): string => {
+    const trimmed = message.trim()
+    if (!trimmed) {
+      return 'Message is required'
+    }
+    if (trimmed.length < 10) {
+      return 'Message must be at least 10 characters long'
+    }
+    return ''
+  }
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    setFormData((prev) => ({ ...prev, name: val }))
+    if (touched.name) {
+      setErrors((prev) => ({ ...prev, name: validateName(val) }))
+    }
+  }
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    setFormData((prev) => ({ ...prev, email: val }))
+    if (touched.email) {
+      setErrors((prev) => ({ ...prev, email: validateEmail(val) }))
+    }
+  }
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value
+    setFormData((prev) => ({ ...prev, message: val }))
+    if (touched.message) {
+      setErrors((prev) => ({ ...prev, message: validateMessage(val) }))
+    }
+  }
+
+  const handleBlur = (field: 'name' | 'email' | 'message') => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+    if (field === 'name') {
+      setErrors((prev) => ({ ...prev, name: validateName(formData.name) }))
+    } else if (field === 'email') {
+      setErrors((prev) => ({ ...prev, email: validateEmail(formData.email) }))
+    } else if (field === 'message') {
+      setErrors((prev) => ({ ...prev, message: validateMessage(formData.message) }))
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const nameErr = validateName(formData.name)
+    const emailErr = validateEmail(formData.email)
+    const messageErr = validateMessage(formData.message)
+
+    setTouched({ name: true, email: true, message: true })
+    setErrors({ name: nameErr, email: emailErr, message: messageErr })
+
+    if (nameErr || emailErr || messageErr) {
+      return
+    }
+
+    setSent(true)
+  }
+
+  const handleReset = () => {
+    setSent(false)
+    setFormData({ name: '', email: '', message: '' })
+    setErrors({ name: '', email: '', message: '' })
+    setTouched({ name: false, email: false, message: false })
+  }
 
   return (
     <section id="contact" className="relative pt-12 pb-8 md:pt-20 md:pb-12 lg:pt-24 lg:pb-16 overflow-hidden px-5 md:px-8">
@@ -35,42 +150,85 @@ export function Contact() {
 
             <div className="rounded-[20px] border border-white/10 bg-white/[0.045] p-5 shadow-[0_24px_82px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] glass-panel md:p-6 mt-24">
               {sent ? (
-                <div className="flex min-h-[220px] flex-col items-center justify-center gap-4 text-center">
-                  <span className="flex size-12 items-center justify-center rounded-full border border-cyan-brand/20 bg-cyan-brand/10 text-cyan-brand">
-                    <Check className="size-6" aria-hidden="true" />
+                <div className="flex min-h-[260px] flex-col items-center justify-center gap-4 text-center py-6">
+                  <span className="flex size-14 items-center justify-center rounded-full border border-cyan-brand/30 bg-cyan-brand/10 text-cyan-brand">
+                    <Check className="size-7" aria-hidden="true" />
                   </span>
                   <h3 className="font-sans text-2xl font-extrabold headline-tight text-foreground">
-                    Request received
+                    Request Received!
                   </h3>
                   <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
                     Thanks for reaching out. We'll review your details and respond with the next step.
                   </p>
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-2.5 text-xs font-bold text-foreground transition-all hover:bg-white/20 cursor-pointer"
+                  >
+                    <RotateCcw className="size-3.5" /> Submit Another Request
+                  </button>
                 </div>
               ) : (
-                <form
-                  className="grid gap-4"
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    setSent(true)
-                  }}
-                >
+                <form className="grid gap-4" onSubmit={handleSubmit} noValidate>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="contact-name" className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/75">
+                      <label htmlFor="contact-name" className="font-sans text-xs font-bold text-foreground">
                         Name
                       </label>
-                      <input id="contact-name" name="name" type="text" required autoComplete="name" placeholder="Your name" className={inputClass} />
+                      <input
+                        id="contact-name"
+                        name="name"
+                        type="text"
+                        required
+                        autoComplete="name"
+                        placeholder="e.g. John Doe"
+                        value={formData.name}
+                        onChange={handleNameChange}
+                        onBlur={() => handleBlur('name')}
+                        className={`${inputBaseClass} ${
+                          errors.name
+                            ? 'border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'
+                            : 'border-white/10 hover:border-cyan-brand/30 focus:border-cyan-brand/60 focus:ring-1 focus:ring-cyan-brand/20'
+                        }`}
+                      />
+                      {errors.name && (
+                        <span className="flex items-center gap-1 text-[11px] text-red-400">
+                          <AlertCircle className="size-3 shrink-0" />
+                          {errors.name}
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="contact-email" className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/75">
+                      <label htmlFor="contact-email" className="font-sans text-xs font-bold text-foreground">
                         Email
                       </label>
-                      <input id="contact-email" name="email" type="email" required autoComplete="email" placeholder="you@company.com" className={inputClass} />
+                      <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        required
+                        autoComplete="email"
+                        placeholder="you@company.com"
+                        value={formData.email}
+                        onChange={handleEmailChange}
+                        onBlur={() => handleBlur('email')}
+                        className={`${inputBaseClass} ${
+                          errors.email
+                            ? 'border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'
+                            : 'border-white/10 hover:border-cyan-brand/30 focus:border-cyan-brand/60 focus:ring-1 focus:ring-cyan-brand/20'
+                        }`}
+                      />
+                      {errors.email && (
+                        <span className="flex items-center gap-1 text-[11px] text-red-400">
+                          <AlertCircle className="size-3 shrink-0" />
+                          {errors.email}
+                        </span>
+                      )}
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="contact-message" className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/75">
+                    <label htmlFor="contact-message" className="font-sans text-xs font-bold text-foreground">
                       Message
                     </label>
                     <textarea
@@ -78,16 +236,29 @@ export function Contact() {
                       name="message"
                       required
                       rows={3}
-                      placeholder="Tell us what you want to automate or build."
-                      className={`${inputClass} resize-none leading-relaxed`}
+                      placeholder="Tell us what you want to automate or build (at least 10 characters)..."
+                      value={formData.message}
+                      onChange={handleMessageChange}
+                      onBlur={() => handleBlur('message')}
+                      className={`${inputBaseClass} resize-none leading-relaxed ${
+                        errors.message
+                          ? 'border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'
+                          : 'border-white/10 hover:border-cyan-brand/30 focus:border-cyan-brand/60 focus:ring-1 focus:ring-cyan-brand/20'
+                      }`}
                     />
+                    {errors.message && (
+                      <span className="flex items-center gap-1 text-[11px] text-red-400">
+                        <AlertCircle className="size-3 shrink-0" />
+                        {errors.message}
+                      </span>
+                    )}
                   </div>
 
                   <button
                     type="submit"
                     className="w-full py-3.5 px-6 rounded-full font-extrabold text-sm text-[#020912] bg-white transition-all duration-300 shadow-[0_4px_20px_rgba(255,255,255,0.06)] hover:bg-gradient-to-r hover:from-white hover:to-[#d0f5fc] hover:shadow-[0_0_24px_rgba(0,180,204,0.25)] hover:-translate-y-[2px] active:translate-y-0 flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    Book a Strategy Call
+                    Submit Request
                   </button>
                 </form>
               )}
