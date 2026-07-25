@@ -1,17 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ChevronRight } from 'lucide-react'
 import { navigate, scrollToSection } from '@/lib/router'
 import { useModals } from '@/lib/modal-context'
 import * as React from 'react'
 
 const links = [
-  { href: '#services', label: 'Services' },
-  { href: '#industries', label: 'Industries' },
-  { href: '#process', label: 'Process' },
-  { href: '#team', label: 'Team' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#top', label: 'Home', hasChevron: false },
+  { href: '#services', label: 'Services', hasChevron: true },
+  { href: '#industries', label: 'Industries', hasChevron: true },
+  { href: '#process', label: 'Process', hasChevron: true },
+  { href: '#team', label: 'Team', hasChevron: false },
+  { href: '#contact', label: 'Contact', hasChevron: false },
 ]
 
 function NavbarLogo({ mobile = false }: { mobile?: boolean }) {
@@ -19,7 +20,7 @@ function NavbarLogo({ mobile = false }: { mobile?: boolean }) {
     <img
       src="/codagentic-logo.png"
       alt="CodAgentic"
-      className={mobile ? 'h-10 w-auto object-contain' : 'h-12 w-auto object-contain'}
+      className={mobile ? 'h-9 w-auto object-contain' : 'h-11 w-auto object-contain'}
       draggable={false}
     />
   )
@@ -79,7 +80,7 @@ export function SiteNav() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'border-b border-border/80 bg-background/70 backdrop-blur-md py-3'
+          ? 'border-b border-white/10 bg-[#020a13]/80 backdrop-blur-md py-3'
           : 'bg-transparent py-5'
       }`}
     >
@@ -100,13 +101,13 @@ export function SiteNav() {
           <NavbarLogo />
         </span>
 
-        <div className="hidden items-center gap-1 rounded-full border border-border/40 bg-surface/40 px-2 py-1.5 glass-panel md:flex">
-          {links.map((link) => (
+        <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-1.5 glass-panel md:flex">
+          {links.filter((l) => l.href !== '#top').map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className="rounded-full px-4 py-1.5 text-xs font-semibold text-muted-foreground transition-all duration-200 hover:bg-surface-2 hover:text-foreground"
+              className="rounded-full px-4 py-1.5 text-xs font-semibold text-muted-foreground transition-all duration-200 hover:bg-white/10 hover:text-foreground"
             >
               {link.label}
             </a>
@@ -117,7 +118,7 @@ export function SiteNav() {
           <button
             type="button"
             onClick={() => openStrategyCall()}
-            className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-foreground px-6 py-2.5 text-xs font-bold text-background transition-all duration-300 hover:bg-foreground/90 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,255,255,0.08)] cursor-pointer"
+            className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-foreground px-6 py-2.5 text-xs font-bold text-background transition-all duration-300 hover:bg-foreground/90 hover:scale-[1.02] shadow-[0_0_20px_rgba(46,175,255,0.2)] cursor-pointer"
           >
             Book a Strategy Call
           </button>
@@ -125,7 +126,7 @@ export function SiteNav() {
 
         <button
           type="button"
-          className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-surface md:hidden"
+          className="flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-foreground transition-all hover:bg-white/15 md:hidden"
           aria-expanded={open}
           aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen((v) => !v)}
@@ -134,9 +135,11 @@ export function SiteNav() {
         </button>
       </nav>
 
+      {/* Clean, Authentic Mobile Menu matching reference design */}
       {open && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-background/95 backdrop-blur-xl md:hidden">
-          <div className="flex h-20 items-center justify-between px-6">
+        <div className="fixed inset-0 z-50 flex flex-col justify-between bg-[#051624] px-7 py-8 text-white md:hidden">
+          {/* Top Bar with Header Logo & Top-Right Close Icon */}
+          <div className="flex items-center justify-between">
             <a
               href="#top"
               onClick={(e) => {
@@ -150,15 +153,17 @@ export function SiteNav() {
             </a>
             <button
               type="button"
-              className="flex size-10 items-center justify-center rounded-full text-foreground hover:bg-surface"
+              className="flex size-10 items-center justify-center text-white transition-opacity hover:opacity-80"
               aria-label="Close menu"
               onClick={() => setOpen(false)}
             >
-              <X className="size-6" />
+              <X className="size-7" />
             </button>
           </div>
-          <div className="flex flex-1 flex-col items-start justify-center gap-6 px-8">
-            {links.map((link, i) => (
+
+          {/* Vertical Menu Link List - Positioned near top */}
+          <div className="mt-6 flex flex-col space-y-4 pt-2">
+            {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -166,21 +171,30 @@ export function SiteNav() {
                   handleLinkClick(e, link.href)
                   setOpen(false)
                 }}
-                className="font-sans text-4xl font-extrabold headline-tight text-foreground transition-colors hover:text-primary"
-                style={{ animationDelay: `${i * 60}ms` }}
+                className="group flex items-center justify-between text-left transition-colors"
               >
-                {link.label}
+                <span className="font-sans text-xl font-bold tracking-tight text-white transition-colors group-hover:text-[#8FEAFF]">
+                  {link.label}
+                </span>
+                {link.hasChevron && (
+                  <ChevronRight className="size-5 text-[#2EAFFF] transition-transform group-hover:translate-x-1" />
+                )}
               </a>
             ))}
+          </div>
+
+          {/* Bottom Action Floating Pill */}
+          <div className="pt-6">
             <button
               type="button"
               onClick={() => {
                 setOpen(false)
                 openStrategyCall()
               }}
-              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-foreground px-7 py-3.5 text-sm font-semibold text-background cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-sans text-sm font-semibold text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-95 cursor-pointer"
             >
-              Book a Strategy Call
+              <span>Book a Strategy Call</span>
+              <ChevronRight className="size-4 text-[#8FEAFF]" />
             </button>
           </div>
         </div>
