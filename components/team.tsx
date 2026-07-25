@@ -32,6 +32,40 @@ const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
+interface TeamMember {
+  name: string
+  role: string
+  image: string
+  objectPosition?: string
+}
+
+const teamMembers: TeamMember[] = [
+  {
+    name: 'Yasir Ali',
+    role: 'AI Engineer',
+    image: '/yasir.jpg',
+    objectPosition: 'object-[center_20%]',
+  },
+  {
+    name: 'Hamayoon Ali',
+    role: 'QA Expert',
+    image: '/Hamayoon Bhutto.png',
+    objectPosition: 'object-top',
+  },
+  {
+    name: 'Abdul Manan',
+    role: 'Junior AI Engineer',
+    image: '/Manaan.png',
+    objectPosition: 'object-top',
+  },
+  {
+    name: 'Muhammad Salman',
+    role: 'Junior QA Expert',
+    image: '/Salman.jpeg',
+    objectPosition: 'object-[center_20%]',
+  },
+]
+
 export function Team() {
   return (
     <section id="team" className="relative section-pad overflow-hidden px-5 md:px-8 border-t border-white/[0.08] bg-[#020a12]/80">
@@ -39,97 +73,104 @@ export function Team() {
       <div className="pointer-events-none absolute right-[12%] bottom-16 -z-10 h-[320px] w-[320px] rounded-full bg-[#49F2B2]/8 blur-3xl" />
 
       <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-12 max-w-3xl">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#8FEAFF]">Leadership & Engineering</p>
+        <Reveal className="mb-12 text-center mx-auto max-w-3xl">
+          <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-[#8FEAFF]">Leadership & Engineering</p>
           <h2 className="font-sans text-3xl font-extrabold headline-tight text-balance md:text-5xl">
             The people behind the systems
           </h2>
+          <p className="mt-3 text-sm text-muted-foreground md:text-base">
+            Experienced minds. Structured solutions. Sustainable results.
+          </p>
         </Reveal>
 
-        {/* Domain-style Cards Grid */}
-        <Reveal
-          stagger="[data-team-card]"
-          staggerSpeed={0.08}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 lg:gap-14 max-w-5xl mx-auto"
-        >
-          {/* Card 1: Founder */}
+        {/* Top Featured Founder Card */}
+        <Reveal className="mx-auto mb-10 max-w-2xl">
           <article
             data-team-card
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] shadow-lg glass-panel transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#2EAFFF]/40 hover:bg-white/[0.07]"
+            className="group relative flex flex-col md:flex-row overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] shadow-xl glass-panel transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#2EAFFF]/40 hover:bg-white/[0.07]"
           >
-            {/* Image Frame - domain card style aspect ratio */}
-            <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10 bg-[#06111f]">
+            <div className="relative h-64 md:h-auto md:w-5/12 overflow-hidden bg-[#06111f]">
               <img
                 src="/mustafa.png"
                 alt="Mustafa Shoukat"
                 className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-1.05"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#040e19]/70 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#040e19] via-transparent to-transparent md:hidden" />
             </div>
 
-            {/* Card Body */}
-            <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#8FEAFF]">
-                Founder
-              </span>
-              <h3 className="mt-1 font-sans text-xl font-extrabold text-foreground group-hover:text-[#8FEAFF] transition-colors">
-                Mustafa Shoukat
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/90">
-                Focused on AI automation, intelligent software architecture, and production-ready enterprise solutions.
-              </p>
+            <div className="flex flex-1 flex-col justify-between p-6 md:p-8">
+              <div>
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#8FEAFF]">
+                  Founder & AI Lead
+                </span>
+                <h3 className="mt-1.5 font-sans text-2xl font-extrabold text-foreground group-hover:text-[#8FEAFF] transition-colors">
+                  Mustafa Shoukat
+                </h3>
+                <p className="mt-3 text-xs md:text-sm leading-relaxed text-muted-foreground/90">
+                  Focused on AI automation, intelligent software architecture, and production-ready enterprise solutions.
+                </p>
+              </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
+              <div className="mt-6 flex items-center gap-3 pt-4 border-t border-white/10">
                 <a
                   href="https://www.linkedin.com/in/mustafashoukat/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
                 >
-                  <LinkedinIcon className="size-3.5" />
+                  <LinkedinIcon className="size-4" />
                   LinkedIn
                 </a>
                 <a
                   href="https://github.com/Mustafa-Shoukat1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
                 >
-                  <GithubIcon className="size-3.5" />
+                  <GithubIcon className="size-4" />
                   GitHub
                 </a>
               </div>
             </div>
           </article>
+        </Reveal>
 
-          {/* Card 2: AI Engineering Team */}
-          <article
-            data-team-card
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] shadow-lg glass-panel transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#2EAFFF]/40 hover:bg-white/[0.07]"
-          >
-            {/* Image Frame - domain card style aspect ratio with real high quality team image */}
-            <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10 bg-[#06111f]">
+        {/* 4 Team Members Grid in a Single Row (Desktop 4 Columns) */}
+        <Reveal
+          stagger="[data-team-card]"
+          staggerSpeed={0.08}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {teamMembers.map((member) => (
+            <article
+              key={member.name}
+              data-team-card
+              className="group relative flex h-[360px] flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-[#06111e] shadow-xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-[#2EAFFF]/50 hover:shadow-[0_20px_50px_rgba(46,175,255,0.2)]"
+            >
+              {/* Card Photo */}
               <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80"
-                alt="AI Development Team working together"
-                className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-1.05"
+                src={member.image}
+                alt={member.name}
+                className={`absolute inset-0 h-full w-full object-cover ${member.objectPosition || 'object-center'} brightness-[1.05] contrast-[1.02] transition-transform duration-700 ease-out group-hover:scale-1.08`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#040e19]/70 via-transparent to-transparent" />
-            </div>
 
-            {/* Card Body */}
-            <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#8FEAFF]">
-                Engineering Team
-              </span>
-              <h3 className="mt-1 font-sans text-xl font-extrabold text-foreground group-hover:text-[#8FEAFF] transition-colors">
-                AI Development Team
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/90">
-                Creating AI-powered applications, autonomous agents, chatbots, and custom automation infrastructure.
-              </p>
-            </div>
-          </article>
+              {/* Lightened Gradient Overlay focused ONLY at the bottom text area so face is crisp and fully visible */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020912] via-[#020912]/25 to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-90" />
+
+              {/* Card Text Content */}
+              <div className="relative z-10 p-6">
+                <h3 className="font-sans text-xl font-extrabold text-foreground drop-shadow-md group-hover:text-[#8FEAFF] transition-colors">
+                  {member.name}
+                </h3>
+                <p className="mt-1 font-mono text-xs font-semibold text-[#8FEAFF] drop-shadow-sm">
+                  {member.role}
+                </p>
+              </div>
+
+              {/* Bottom Subtle Accent Glow */}
+              <div className="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#2EAFFF] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </article>
+          ))}
         </Reveal>
       </div>
     </section>
