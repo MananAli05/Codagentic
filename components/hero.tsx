@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { motion } from 'framer-motion'
@@ -67,11 +67,20 @@ function CyanParticles() {
 
 function HeroEcosystem() {
   const pointer = useRef({ x: 0, y: 0 })
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   return (
     <div
       className="absolute inset-0"
       onPointerMove={(event) => {
+        if (isMobile) return
         const rect = event.currentTarget.getBoundingClientRect()
         pointer.current = {
           x: ((event.clientX - rect.left) / rect.width - 0.5) * 2,
@@ -81,6 +90,7 @@ function HeroEcosystem() {
         event.currentTarget.style.setProperty('--hero-pointer-y', `${pointer.current.y}`)
       }}
       onPointerLeave={(event) => {
+        if (isMobile) return
         pointer.current = { x: 0, y: 0 }
         event.currentTarget.style.setProperty('--hero-pointer-x', '0')
         event.currentTarget.style.setProperty('--hero-pointer-y', '0')
@@ -90,17 +100,19 @@ function HeroEcosystem() {
       <div className="hero-ai-grid pointer-events-none absolute inset-0 opacity-30" />
       <div className="hero-robot-glow pointer-events-none absolute" />
 
-      <Canvas
-        className="pointer-events-none absolute inset-0"
-        camera={{ position: [0, 0, 7.5], fov: 42 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      >
-        <ambientLight intensity={1.1} />
-        <directionalLight position={[3, 4, 5]} intensity={1.8} color="#ffffff" />
-        <pointLight position={[0, 1.2, 2.4]} intensity={5} color="#2EAFFF" distance={8} />
-        <CyanParticles />
-      </Canvas>
+      {!isMobile && (
+        <Canvas
+          className="pointer-events-none absolute inset-0"
+          camera={{ position: [0, 0, 7.5], fov: 42 }}
+          dpr={[1, 1.2]}
+          gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
+        >
+          <ambientLight intensity={1.1} />
+          <directionalLight position={[3, 4, 5]} intensity={1.8} color="#ffffff" />
+          <pointLight position={[0, 1.2, 2.4]} intensity={5} color="#2EAFFF" distance={8} />
+          <CyanParticles />
+        </Canvas>
+      )}
 
       <div className="hero-robot-float pointer-events-none absolute inset-0">
         <div className="hero-robot-parallax">

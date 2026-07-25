@@ -5,7 +5,7 @@ import { useMemo, useRef, useState, useEffect } from 'react'
 import * as THREE from 'three'
 
 // Clean, high-performance particle system of small floating blue and white circles
-function FloatingBoxes({ count = 160 }) {
+function FloatingBoxes({ count = 160 }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null)
 
   // Generate a smooth circular alpha mask texture to make the particles perfectly round
@@ -35,7 +35,6 @@ function FloatingBoxes({ count = 160 }) {
     const color = new THREE.Color()
 
     for (let i = 0; i < count; i++) {
-      // Spread positions across the viewport
       const posX = (Math.random() - 0.5) * 38
       const posY = (Math.random() - 0.5) * 26
       const posZ = (Math.random() - 0.5) * 14 - 6
@@ -48,7 +47,6 @@ function FloatingBoxes({ count = 160 }) {
       basePos[i * 3 + 1] = posY
       basePos[i * 3 + 2] = posZ
 
-      // Assign blue (#2EAFFF) or bright white (#ffffff) to each circle
       const isWhite = Math.random() > 0.65
       const colStr = isWhite ? '#ffffff' : '#2EAFFF'
       color.set(colStr)
@@ -56,9 +54,8 @@ function FloatingBoxes({ count = 160 }) {
       cols[i * 3 + 1] = color.g
       cols[i * 3 + 2] = color.b
 
-      // Set upwards float speed
       vls[i * 3] = (Math.random() - 0.5) * 0.15
-      vls[i * 3 + 1] = 0.25 + Math.random() * 0.45 // Y rising speed
+      vls[i * 3 + 1] = 0.25 + Math.random() * 0.45
       vls[i * 3 + 2] = (Math.random() - 0.5) * 0.05
     }
 
@@ -77,29 +74,25 @@ function FloatingBoxes({ count = 160 }) {
     if (pts && pts.geometry.attributes.position) {
       const posAttr = pts.geometry.attributes.position as THREE.BufferAttribute
       const time = state.clock.getElapsedTime()
-      const { x: px, y: py } = state.pointer // mouse coordinates [-1, 1]
+      const { x: px, y: py } = state.pointer
 
-      // Project pointer coordinates to approximate 3D plane
       const targetX = px * 14
       const targetY = py * 9
 
       for (let i = 0; i < count; i++) {
-        // Float base coordinates upward (non-accumulating X/Y offset bug fix)
         let baseY = basePositions[i * 3 + 1] + velocities[i * 3 + 1] * delta * 1.5
         if (baseY > 15) {
           baseY = -15
-          basePositions[i * 3] = (Math.random() - 0.5) * 38 // randomize X on loop
+          basePositions[i * 3] = (Math.random() - 0.5) * 38
         }
         basePositions[i * 3 + 1] = baseY
 
         const baseX = basePositions[i * 3]
         const baseZ = basePositions[i * 3 + 2]
 
-        // Add dynamic wave sway
         let currentX = baseX + Math.sin(time * 0.35 + i) * 0.4
         let currentY = baseY
 
-        // Mouse repulsion: push circles away temporarily for this frame
         const diffX = currentX - targetX
         const diffY = currentY - targetY
         const distSq = diffX * diffX + diffY * diffY
@@ -117,7 +110,6 @@ function FloatingBoxes({ count = 160 }) {
       }
       posAttr.needsUpdate = true
 
-      // Slow overall rotation of the field
       pts.rotation.y = time * 0.008
       pts.rotation.x = Math.sin(time * 0.002) * 0.015
     }
@@ -140,9 +132,32 @@ function FloatingBoxes({ count = 160 }) {
 
 export function LatticeBackground() {
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   if (!mounted) return null
+
+  // On mobile screens, disable background WebGL Canvas to save CPU/GPU & prevent phone lag
+  if (isMobile) {
+    return (
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 bg-transparent"
+      >
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-[#2EAFFF]/10 blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 h-80 w-80 rounded-full bg-[#49F2B2]/8 blur-3xl" />
+      </div>
+    )
+  }
 
   return (
     <div
@@ -152,7 +167,7 @@ export function LatticeBackground() {
       <Canvas
         camera={{ position: [0, 0, 16], fov: 60 }}
         dpr={[1, 1.5]}
-        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+        gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
       >
         <FloatingBoxes count={160} />
       </Canvas>
