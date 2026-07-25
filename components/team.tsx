@@ -83,13 +83,13 @@ export function Team() {
           </p>
         </Reveal>
 
-        {/* Top Featured Founder Card */}
-        <Reveal className="mx-auto mb-10 max-w-2xl">
+        {/* Top Featured Founder Card (Medium-Sized & Balanced) */}
+        <Reveal className="mx-auto mb-10 max-w-lg">
           <article
             data-team-card
-            className="group relative flex flex-col md:flex-row overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] shadow-xl glass-panel transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#2EAFFF]/40 hover:bg-white/[0.07]"
+            className="group relative flex flex-col md:flex-row overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] shadow-xl glass-panel transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#2EAFFF]/40 hover:bg-white/[0.07]"
           >
-            <div className="relative h-64 md:h-auto md:w-5/12 overflow-hidden bg-[#06111f]">
+            <div className="relative h-56 md:h-auto md:w-[210px] shrink-0 overflow-hidden bg-[#06111f]">
               <img
                 src="/mustafa.png"
                 alt="Mustafa Shoukat"
@@ -98,36 +98,36 @@ export function Team() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#040e19] via-transparent to-transparent md:hidden" />
             </div>
 
-            <div className="flex flex-1 flex-col justify-between p-6 md:p-8">
+            <div className="flex flex-1 flex-col justify-between p-5 md:p-6">
               <div>
-                <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#8FEAFF]">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-[#8FEAFF]">
                   Founder & AI Lead
                 </span>
-                <h3 className="mt-1.5 font-sans text-2xl font-extrabold text-foreground group-hover:text-[#8FEAFF] transition-colors">
+                <h3 className="mt-1 font-sans text-xl font-extrabold text-foreground group-hover:text-[#8FEAFF] transition-colors">
                   Mustafa Shoukat
                 </h3>
-                <p className="mt-3 text-xs md:text-sm leading-relaxed text-muted-foreground/90">
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground/90">
                   Focused on AI automation, intelligent software architecture, and production-ready enterprise solutions.
                 </p>
               </div>
 
-              <div className="mt-6 flex items-center gap-3 pt-4 border-t border-white/10">
+              <div className="mt-4 flex items-center gap-2.5 pt-3 border-t border-white/10">
                 <a
                   href="https://www.linkedin.com/in/mustafashoukat/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
                 >
-                  <LinkedinIcon className="size-4" />
+                  <LinkedinIcon className="size-3.5" />
                   LinkedIn
                 </a>
                 <a
                   href="https://github.com/Mustafa-Shoukat1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-semibold text-foreground transition-all duration-300 hover:border-[#2EAFFF]/40 hover:bg-[#2EAFFF]/10 hover:text-[#8FEAFF]"
                 >
-                  <GithubIcon className="size-4" />
+                  <GithubIcon className="size-3.5" />
                   GitHub
                 </a>
               </div>
